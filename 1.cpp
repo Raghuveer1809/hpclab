@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <stdio.h>
 #include <omp.h>
 #include <stdlib.h>
@@ -7,102 +8,114 @@
 
 int main()
 {
-int             NoofRows, NoofCols, Vectorsize, i, j;
-float         **Matrix, *Vector, *Result, *Checkoutput;
+	int             NoofRows, NoofCols, Vectorsize, i, j;
+	float** Matrix, * Vector, * Result, * Checkoutput;
 
-printf("Read the matrix size noofrows and columns and vectorsize\n");
-scanf("%d %d %d", &NoofRows, &NoofCols, &Vectorsize);
+	printf("Read the matrix size noofrows and columns and vectorsize\n");
+	scanf_s("%d%d%d", &NoofRows, &NoofCols, &Vectorsize);
 
-if (NoofRows <= 0 || NoofCols <= 0 || Vectorsize <= 0) {
-printf("The Matrix and Vectorsize should be of positive sign\n");
-exit(1);
-}
-/* Checking For Matrix Vector Computation Necessary Condition */
+	if (NoofRows <= 0 || NoofCols <= 0 || Vectorsize <= 0) {
+		printf("The Matrix and Vectorsize should be of positive sign\n");
+		exit(1);
+	}
+	/* Checking For Matrix Vector Computation Necessary Condition */
 
-if (NoofCols != Vectorsize) {
-printf("Matrix Vector computation cannot be possible \n");
-exit(1);
-}
-/* Dynamic Memory Allocation  And Initialization Of Matrix Elements */
+	if (NoofCols != Vectorsize) {
+		printf("Matrix Vector computation cannot be possible \n");
+		exit(1);
+	}
+	/* Dynamic Memory Allocation  And Initialization Of Matrix Elements */
 
-Matrix = (float **)malloc(sizeof(float) * NoofRows);
-for (i = 0; i < NoofRows; i++) {
-Matrix[i] = (float *)malloc(sizeof(float) * NoofCols);
-for (j = 0; j < NoofCols; j++)
-Matrix[i][j] = i + j;
-}
+	Matrix = (float**)malloc(sizeof(float) * NoofRows);
+	for (i = 0; i < NoofRows; i++) {
+		Matrix[i] = (float*)malloc(sizeof(float) * NoofCols);
+		for (j = 0; j < NoofCols; j++)
+			Matrix[i][j] = i + j;
+	}
 
-/* Printing The Matrix */
+	/* Printing The Matrix */
 
-printf("The Matrix is \n");
-for (i = 0; i < NoofRows; i++) {
-for (j = 0; j < NoofCols; j++)
-printf("%f \t", Matrix[i][j]);
-printf("\n");
-}
+	printf("The Matrix is \n");
+	for (i = 0; i < NoofRows; i++) {
+		for (j = 0; j < NoofCols; j++)
+			printf("%f \t", Matrix[i][j]);
+		printf("\n");
+	}
 
-printf("\n");
+	printf("\n");
 
-/* Dynamic Memory Allocation */
+	/* Dynamic Memory Allocation */
 
-Vector = (float *)malloc(sizeof(float) * Vectorsize);
+	Vector = (float*)malloc(sizeof(float) * Vectorsize);
 
-/* vector Initialization */
+	/* vector Initialization */
 
-for (i = 0; i < Vectorsize; i++)
-Vector[i] = i;
+	for (i = 0; i < Vectorsize; i++)
+		Vector[i] = i;
 
-printf("\n");
+	printf("\n");
 
-/* Printing The Vector Elements */
+	/* Printing The Vector Elements */
 
-printf("The Vector is \n");
-for (i = 0; i < Vectorsize; i++)
-printf("%f \t", Vector[i]);
+	printf("The Vector is \n");
+	for (i = 0; i < Vectorsize; i++)
+		printf("%f \t", Vector[i]);
 
-/* Dynamic Memory Allocation */
+	/* Dynamic Memory Allocation */
 
-Result = (float *)malloc(sizeof(float) * NoofRows);
+	Result = (float*)malloc(sizeof(float) * NoofRows);
 
-Checkoutput = (float *)malloc(sizeof(float) * NoofRows);
+	Checkoutput = (float*)malloc(sizeof(float) * NoofRows);
 
-for (i = 0; i < NoofRows; i = i + 1)
-{
-Result[i] = 0;
-Checkoutput[i] = 0;
-}
+	for (i = 0; i < NoofRows; i = i + 1)
+	{
+		Result[i] = 0;
+		Checkoutput[i] = 0;
+	}
 
-/* OpenMP Parallel Directive */
+	/* OpenMP Parallel Directive */
 
 #pragma omp parallel for private(j)
-for (i = 0; i < NoofRows; i = i + 1)
-for (j = 0; j < NoofCols; j = j + 1)
-Result[i] = Result[i] + Matrix[i][j] * Vector[j];
+	for (i = 0; i < NoofRows; i = i + 1)
+		for (j = 0; j < NoofCols; j = j + 1)
+			Result[i] = Result[i] + Matrix[i][j] * Vector[j];
 
-/* Serial Computation */
+	/* Serial Computation */
 
-for (i = 0; i < NoofRows; i = i + 1)
-for (j = 0; j < NoofCols; j = j + 1)
-Checkoutput[i] = Checkoutput[i] + Matrix[i][j] * Vector[j];
+	for (i = 0; i < NoofRows; i = i + 1)
+		for (j = 0; j < NoofCols; j = j + 1)
+			Checkoutput[i] = Checkoutput[i] + Matrix[i][j] * Vector[j];
 
-for (i = 0; i < NoofRows; i = i + 1)
-if (Checkoutput[i] == Result[i])
-continue;
-else {
-printf("There is a difference from Serial and Parallel Computation \n");
-exit(1);
+	for (i = 0; i < NoofRows; i = i + 1)
+		if (Checkoutput[i] == Result[i])
+			continue;
+		else {
+			printf("There is a difference from Serial and Parallel Computation \n");
+			exit(1);
+		}
+
+
+	printf("\nThe Matrix Computation result is \n");
+	for (i = 0; i < NoofRows; i++)
+		printf("%f \n", Result[i]);
+
+	/* Freeing The Memory Allocations */
+
+	free(Vector);
+	free(Result);
+	free(Matrix);
+	free(Checkoutput);
+
 }
 
 
-printf("\nThe Matrix Computation result is \n");
-for (i = 0; i < NoofRows; i++)
-printf("%f \n", Result[i]);
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+// Debug program: F5 or Debug > Start Debugging menu
 
-/* Freeing The Memory Allocations */
-
-free(Vector);
-free(Result);
-free(Matrix);
-free(Checkoutput);
-
-}
+// Tips for Getting Started: 
+//   1. Use the Solution Explorer window to add/manage files
+//   2. Use the Team Explorer window to connect to source control
+//   3. Use the Output window to see build output and other messages
+//   4. Use the Error List window to view errors
+//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
+//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
