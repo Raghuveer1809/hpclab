@@ -1,0 +1,819 @@
+
+1.Create an android application to understand android activity lifecycle. Demonstrate uses of at least 5 android UI wi
+
+activity_main.java############
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="nmit"
+        android:layout_margin="30dp"
+        android:textSize="24sp"
+        />
+</LinearLayout>
+
+MainActivity.java#############
+
+package com.example.firstapp;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.widget.Toast;
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Toast.makeText(this, "Activity Started: STARTED STATE", Toast.LENGTH_LONG).show();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Toast.makeText(this, "Activity Resumed: INTERACTIVE STATE", Toast.LENGTH_LONG).show();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(this, "Activity Paused: PAUSED STATE", Toast.LENGTH_LONG).show();
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Toast.makeText(this, "Activity Stopped: STOPPED STATE", Toast.LENGTH_LONG).show();
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Toast.makeText(this, "Activity Restarted: RESTARTED STATE", Toast.LENGTH_LONG).show();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "THIS wont be displayed: DESTROYED STATE", Toast.LENGTH_LONG).show();
+    }
+}
+
+
+2.Develop a native application which uses intents to navigate between activities of the application. 
+Demonstrate how to pass data using bundles when the intent is invoked for navigation.
+
+
+activity_main.xml###########
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter your Name"
+        android:id="@+id/name"
+        android:layout_margin="30dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:id="@+id/navigate"
+        android:text="NAVIGATE"
+        />
+</LinearLayout>
+
+MainActivity.java###########
+
+package com.example.anative;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.example.intentdemo.SecondActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText name;
+    Button navigate ;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        name = findViewById(R.id.name);
+        navigate = findViewById(R.id.navigate);
+        navigate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Here", Toast.LENGTH_SHORT).show();
+                String myName = name.getText().toString();
+                Intent it = new Intent(MainActivity.this, SecondActivity.class);it.putExtra("name",myName);
+                startActivity(it);
+            }
+        });
+    }
+}
+
+
+Secondactivity.java############
+
+package
+        com.example.intentdemo;
+
+import
+        androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.widget.TextView;
+
+import com.example.anative.R;
+
+public class SecondActivity extends
+        AppCompatActivity {
+    TextView echoText;
+
+    @Override
+    protected void onCreate(Bundle
+                                    savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        echoText = findViewById(R.id.echotext);
+        Bundle myBundle =
+                getIntent().getExtras();
+        while(myBundle!=null){
+            String myechotext =
+                    myBundle.getString("name");
+            echoText.setText(myechotext);
+        }
+    }
+}
+
+fragment_second.java##########
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SecondActivity"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SAMPLE TEXT"
+        android:id="@+id/echotext"
+        android:layout_margin="30dp"
+        android:fontFamily="cursive"
+        android:textStyle="bold"
+        android:textSize="30dp"/>
+</LinearLayout>
+
+
+
+3.Develop a native calculator application using LinearLayout and onClickListener interface on buttons.
+
+
+activity_main.xml############
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relative1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/edt1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <Button
+        android:id="@+id/button1"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/button4"
+        android:layout_alignRight="@+id/button4"
+        android:layout_below="@+id/edt1"
+        android:layout_marginTop="94dp"
+        android:text="1" />
+
+    <Button
+        android:id="@+id/button2"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/button1"
+        android:layout_toLeftOf="@+id/button3"
+        android:layout_toStartOf="@+id/button3"
+        android:text="2" />
+
+    <Button
+        android:id="@+id/button3"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/button2"
+        android:layout_centerHorizontal="true"
+        android:text="3" />
+
+    <Button
+        android:id="@+id/button4"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button1"
+        android:layout_toLeftOf="@+id/button2"
+        android:text="4" />
+
+    <Button
+        android:id="@+id/button5"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/button4"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_alignStart="@+id/button2"
+        android:text="5" />
+
+    <Button
+        android:id="@+id/button6"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button3"
+        android:layout_alignStart="@+id/button3"
+        android:layout_below="@+id/button3"
+        android:text="6" />
+
+    <Button
+        android:id="@+id/button7"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button4"
+        android:layout_toLeftOf="@+id/button2"
+        android:text="7" />
+
+    <Button
+        android:id="@+id/button8"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button5"
+        android:layout_alignStart="@+id/button5"
+        android:layout_below="@+id/button5"
+        android:text="8" />
+
+    <Button
+        android:id="@+id/button9"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button6"
+        android:layout_alignStart="@+id/button6"
+        android:layout_below="@+id/button6"
+        android:text="9" />
+
+    <Button
+        android:id="@+id/buttonadd"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/edt1"
+        android:layout_alignRight="@+id/edt1"
+        android:layout_alignTop="@+id/button3"
+        android:layout_marginLeft="46dp"
+        android:layout_marginStart="46dp"
+        android:layout_toRightOf="@+id/button3"
+        android:text="+" />
+
+    <Button
+        android:id="@+id/buttonsub"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/buttonadd"
+        android:layout_alignLeft="@+id/buttonadd"
+        android:layout_alignRight="@+id/buttonadd"
+        android:layout_alignStart="@+id/buttonadd"
+        android:layout_below="@+id/buttonadd"
+        android:text="-" />
+
+    <Button
+        android:id="@+id/buttonmul"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buttonsub"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignStart="@+id/buttonsub"
+        android:layout_below="@+id/buttonsub"
+        android:text="*" />
+
+    <Button
+        android:id="@+id/button10"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button7"
+        android:layout_toLeftOf="@+id/button2"
+        android:text="." />
+
+    <Button
+        android:id="@+id/button0"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button8"
+        android:layout_alignStart="@+id/button8"
+        android:layout_below="@+id/button8"
+        android:text="0" />
+
+    <Button
+        android:id="@+id/buttonC"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button9"
+        android:layout_alignStart="@+id/button9"
+        android:layout_below="@+id/button9"
+        android:text="C" />
+
+    <Button
+        android:id="@+id/buttondiv"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/buttonmul"
+        android:layout_alignLeft="@+id/buttonmul"
+        android:layout_alignRight="@+id/buttonmul"
+        android:layout_alignStart="@+id/buttonmul"
+        android:layout_below="@+id/buttonmul"
+        android:text="/" />
+
+    <Button
+        android:id="@+id/buttoneql"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/buttondiv"
+        android:layout_alignLeft="@+id/button10"
+        android:layout_alignRight="@+id/buttondiv"
+        android:layout_alignStart="@+id/button10"
+        android:layout_below="@+id/button0"
+        android:layout_marginTop="37dp"
+        android:text="=" />
+
+</RelativeLayout>
+
+Mainactivity.java#############33
+
+package com.example.calculator;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+public class MainActivity extends AppCompatActivity {
+
+    Button button0, button1, button2, button3, button4, button5, button6,
+            button7, button8, button9, buttonAdd, buttonSub, buttonDivision,
+            buttonMul, button10, buttonC, buttonEqual;
+    EditText crunchifyEditText;
+
+    float mValueOne, mValueTwo;
+
+    boolean crunchifyAddition, mSubtract, crunchifyMultiplication, crunchifyDivision;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        button0 = (Button) findViewById(R.id.button0);
+        button1 = (Button) findViewById(R.id.button1);
+        button2 = (Button) findViewById(R.id.button2);
+        button3 = (Button) findViewById(R.id.button3);
+        button4 = (Button) findViewById(R.id.button4);
+        button5 = (Button) findViewById(R.id.button5);
+        button6 = (Button) findViewById(R.id.button6);
+        button7 = (Button) findViewById(R.id.button7);
+        button8 = (Button) findViewById(R.id.button8);
+        button9 = (Button) findViewById(R.id.button9);
+        button10 = (Button) findViewById(R.id.button10);
+        buttonAdd = (Button) findViewById(R.id.buttonadd);
+        buttonSub = (Button) findViewById(R.id.buttonsub);
+        buttonMul = (Button) findViewById(R.id.buttonmul);
+        buttonDivision = (Button) findViewById(R.id.buttondiv);
+        buttonC = (Button) findViewById(R.id.buttonC);
+        buttonEqual = (Button) findViewById(R.id.buttoneql);
+        crunchifyEditText = (EditText) findViewById(R.id.edt1);
+
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crunchifyEditText.setText(crunchifyEditText.getText() + "1");
+            }
+        });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crunchifyEditText.setText(crunchifyEditText.getText() + "2");
+            }
+        });
+
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crunchifyEditText.setText(crunchifyEditText.getText() + "3");
+            }
+        });
+
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crunchifyEditText.setText(crunchifyEditText.getText() + "4");
+            }
+        });
+
+        button5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crunchifyEditText.setText(crunchifyEditText.getText() + "5");
+            }
+        });
+
+        button6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crunchifyEditText.setText(crunchifyEditText.getText() + "6");
+            }
+        });
+
+        button7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crunchifyEditText.setText(crunchifyEditText.getText() + "7");
+            }
+        });
+
+        button8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crunchifyEditText.setText(crunchifyEditText.getText() + "8");
+            }
+        });
+
+        button9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crunchifyEditText.setText(crunchifyEditText.getText() + "9");
+            }
+        });
+
+        button0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crunchifyEditText.setText(crunchifyEditText.getText() + "0");
+            }
+        });
+
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (crunchifyEditText == null) {
+                    crunchifyEditText.setText("");
+                } else {
+                    mValueOne = Float.parseFloat(crunchifyEditText.getText() + "");
+                    crunchifyAddition = true;
+                    crunchifyEditText.setText(null);
+                }
+            }
+        });
+
+        buttonSub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mValueOne = Float.parseFloat(crunchifyEditText.getText() + "");
+                mSubtract = true;
+                crunchifyEditText.setText(null);
+            }
+        });
+
+        buttonMul.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mValueOne = Float.parseFloat(crunchifyEditText.getText() + "");
+                crunchifyMultiplication = true;
+                crunchifyEditText.setText(null);
+            }
+        });
+
+        buttonDivision.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mValueOne = Float.parseFloat(crunchifyEditText.getText() + "");
+                crunchifyDivision = true;
+                crunchifyEditText.setText(null);
+            }
+        });
+
+        buttonEqual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mValueTwo = Float.parseFloat(crunchifyEditText.getText() + "");
+
+                if (crunchifyAddition == true) {
+                    crunchifyEditText.setText(mValueOne + mValueTwo + "");
+                    crunchifyAddition = false;
+                }
+
+                if (mSubtract == true) {
+                    crunchifyEditText.setText(mValueOne - mValueTwo + "");
+                    mSubtract = false;
+                }
+
+                if (crunchifyMultiplication == true) {
+                    crunchifyEditText.setText(mValueOne * mValueTwo + "");
+                    crunchifyMultiplication = false;
+                }
+
+                if (crunchifyDivision == true) {
+                    crunchifyEditText.setText(mValueOne / mValueTwo + "");
+                    crunchifyDivision = false;
+                }
+            }
+        });
+
+        buttonC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crunchifyEditText.setText("");
+            }
+        });
+
+        button10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crunchifyEditText.setText(crunchifyEditText.getText() + ".");
+            }
+        });
+    }
+}
+
+
+
+
+
+
+4.Construct a native application for demonstrating database implementing SQLiteOpenHelper class.
+ Demonstrate how to delete, update, and insert entries in the created database. 
+
+active_main.xml#########
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<LinearLayout
+    android:padding="25dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="MainActivity"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditText
+        android:id="@+id/name"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="Name"/>
+
+    <EditText
+        android:id="@+id/location"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="Location"/>
+
+    <EditText
+        android:id="@+id/Profession"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="Profession"/>
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:onClick="insert"
+        android:text="Submit"/>
+
+    <EditText
+        android:id="@+id/fetchname"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="Enter name"/>
+
+    <TextView
+        android:id="@+id/fetchloc"
+        android:layout_height="39dp"
+        android:layout_width="match_parent"
+        android:textAlignment="textStart"
+        android:textSize="20dp"
+        android:visibility="gone"
+        android:gravity="start" />
+
+    <TextView
+        android:id="@+id/fetchpro"
+        android:layout_height="45dp"
+        android:layout_width="match_parent"
+        android:textAlignment="textStart"
+        android:textSize="20dp"
+        android:visibility="gone"
+        android:gravity="start" />
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="Fetch Details"
+        android:onClick="getd" />
+
+</LinearLayout>
+
+Mainactivity.java##########
+
+
+package com.example.sqlitedemo;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import java.util.ArrayList;
+
+
+public class MainActivity extends AppCompatActivity {
+    EditText nm,lc,pro,fn;
+    TextView fl,fp;
+    DbController dbController;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        nm=findViewById(R.id.name);
+        lc=findViewById(R.id.location);
+        pro=findViewById(R.id.Profession);
+        fn=findViewById(R.id.fetchname);
+        fl=findViewById(R.id.fetchloc);
+        fp=findViewById(R.id.fetchpro);
+        dbController=new DbController(this);
+
+
+    }
+
+    public void insert(View v){
+        String name=nm.getText().toString();
+        String loc=lc.getText().toString();
+        String prof=pro.getText().toString();
+        if(dbController.insetdb(name,loc,prof)){
+            Toast.makeText(this, "Insertion Success", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, "Unable to insert", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void getd(View v){
+        String name=fn.getText().toString();
+        String fd[]=dbController.fetchdb(name);
+        if(fd.length==0){
+            Toast.makeText(this, "No Data Available", Toast.LENGTH_SHORT).show();
+        }else {
+            fl.setText(fd[0]);
+            fp.setText(fd[1]);
+            fl.setVisibility(View.VISIBLE);
+            fp.setVisibility(View.VISIBLE);
+        }
+    }
+}
+
+DbController.java###########
+
+package com.example.sqlitedemo;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteOpenHelper;
+
+public class DbController extends SQLiteOpenHelper{
+    private static final String DB_NAME = "Emp_db";
+    public static final String TABLE_NAME="Employee";
+
+
+    public DbController(Context context) {
+        super(context, DB_NAME, null, 1);
+    }
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String cmd = "create table " + TABLE_NAME + " (name text primary key, location text, profession text)";
+        db.execSQL(cmd);
+    }
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+
+    public boolean insetdb(String name, String loc, String prof ){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues contentValues=new ContentValues();
+        contentValues.put("name",name);
+        contentValues.put("location",loc);
+        contentValues.put("profession",prof);
+        db.insert(TABLE_NAME,null,contentValues);
+        return true;
+    }
+
+    public String[] fetchdb(String nm){
+        String[] ret=new String[2];
+        SQLiteDatabase db=this.getReadableDatabase();
+        String query="select * from "+TABLE_NAME+" where name='"+nm+"'";
+        @SuppressLint("Recycle") Cursor cursor=db.rawQuery(query,null);
+        if(cursor!=null){
+            cursor.moveToFirst();
+            ret[0]=cursor.getString(cursor.getColumnIndex("location"));
+            ret[1]=cursor.getString(cursor.getColumnIndex("profession"));
+        }
+
+
+        return ret;
+    }
+}
+
+
+
+
+5.Develop a native application that uses GPS location information and display the current coordinates on google maps using google maps API
+
+
+
+
+
+
+
+
+
+
+
+
